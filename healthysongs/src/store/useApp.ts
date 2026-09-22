@@ -18,6 +18,18 @@ import type { SpotifyTag, SpotifyTokens, ZoneKey } from '@/spotify/types';
 
 export type SensingMode = 'face' | 'manual' | 'laptop' | 'demo';
 
+/**
+ * The app was called MoodPath until 2026-09-22 and saved under that key. On
+ * the first run after the rename, read the old save so the research log,
+ * settings and Spotify sign-in carry over; the next write moves them.
+ */
+const LEGACY_KEY = 'moodpath-v1';
+const storage = {
+  getItem: async (name: string) => (await AsyncStorage.getItem(name)) ?? AsyncStorage.getItem(LEGACY_KEY),
+  setItem: (name: string, value: string) => AsyncStorage.setItem(name, value),
+  removeItem: (name: string) => AsyncStorage.removeItem(name),
+};
+
 export type Settings = {
   sensingMode: SensingMode;
   showCameraPreview: boolean;
@@ -215,7 +227,7 @@ export const useApp = create<AppState>()(
     }),
     {
       name: 'healthysongs-v1',
-      storage: createJSONStorage(() => AsyncStorage),
+      storage: createJSONStorage(() => storage),
       // fusion state and the active journey are session-only
       partialize: (s) => ({
         consentGiven: s.consentGiven,
