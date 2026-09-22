@@ -1,5 +1,5 @@
 """
-Laptop fallback sensor for MoodPath.
+Laptop fallback sensor for HealthySongs.
 
 The phone posts a small JPEG (base64) every ~1.5 s; this answers with a raw
 valence / arousal reading using MediaPipe's Face Landmarker blendshapes and
@@ -75,7 +75,7 @@ options = vision.FaceLandmarkerOptions(
 )
 landmarker = vision.FaceLandmarker.create_from_options(options)
 
-app = FastAPI(title="MoodPath laptop sensor")
+app = FastAPI(title="HealthySongs laptop sensor")
 
 
 class Frame(BaseModel):
@@ -100,7 +100,7 @@ def read(frame: Frame):
 
 @app.get("/")
 def health():
-    return {"ok": True, "service": "moodpath-laptop-sensor"}
+    return {"ok": True, "service": "healthysongs-laptop-sensor"}
 
 
 def lan_ip() -> str:
@@ -115,5 +115,5 @@ def lan_ip() -> str:
 
 
 if __name__ == "__main__":
-    print(f"\nMoodPath laptop sensor → http://{lan_ip()}:{PORT}   (paste this into Settings → Laptop server URL)\n")
+    print(f"\nHealthySongs laptop sensor → http://{lan_ip()}:{PORT}   (paste this into Settings → Laptop server URL)\n")
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="warning")

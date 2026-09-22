@@ -1,5 +1,5 @@
 /**
- * Spotify side of MoodPath: shared types and the zones of the map that
+ * Spotify side of HealthySongs: shared types and the zones of the map that
  * Spotify songs are sorted into.
  *
  * Why zones and not Spotify's own "valence/energy" numbers: Spotify switched

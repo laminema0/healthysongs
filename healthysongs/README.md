@@ -1,4 +1,4 @@
-# MoodPath (working name)
+# HealthySongs
 
 Music that meets you where you are, then moves you somewhere else.
 
@@ -15,14 +15,14 @@ This is a research prototype, not a product. Everything it senses and decides is
 You need **Node.js 20+** (https://nodejs.org) and the **Expo Go** app on your phone (App Store / Play Store).
 
 ```powershell
-cd path\to\music\moodpath
+cd path\to\music\healthysongs
 npm install
 npx expo start
 ```
 
 Scan the QR code with Expo Go (Android: inside Expo Go; iPhone: with the camera app). Phone and laptop must be on the same Wi-Fi. If the QR won't connect, run `npx expo start --tunnel`.
 
-> OneDrive note: `node_modules` is ~500 MB of small files. If OneDrive slows down, either pause OneDrive sync for this folder or copy the `moodpath` folder somewhere outside OneDrive (e.g. `C:\dev\moodpath`) before `npm install`.
+> OneDrive note: `node_modules` is ~500 MB of small files. If OneDrive slows down, either pause OneDrive sync for this folder or copy the `healthysongs` folder somewhere outside OneDrive (e.g. `C:\dev\healthysongs`) before `npm install`.
 
 The app ships with eight **placeholder tracks** (synthesised, 42 s each, spread across the map) so a journey works out of the box. Replace them with real music — see §4.
 
@@ -71,7 +71,7 @@ To regenerate the placeholders: `pip install numpy scipy` then `python scripts/m
 
 ## 5. Jen: composing the missing tracks
 
-[Jen](https://www.jenmusic.ai) (Futureverse) is a text-to-music model trained on licensed music; you own what it generates. MoodPath uses it for the **selection decision**: for every step of a journey it asks *is there a track in my library close enough to this point on the map?* If yes, it plays yours. If not, it writes a prompt for that exact point and Jen composes one in a few seconds.
+[Jen](https://www.jenmusic.ai) (Futureverse) is a text-to-music model trained on licensed music; you own what it generates. HealthySongs uses it for the **selection decision**: for every step of a journey it asks *is there a track in my library close enough to this point on the map?* If yes, it plays yours. If not, it writes a prompt for that exact point and Jen composes one in a few seconds.
 
 **No waiting:** the journey starts at once with the closest library track (the "step lighter" match). Jen composes the later steps in the background, and each one is swapped in the moment it's ready, before you reach it. The Journey screen shows how many are ready. The *decision* itself (where you are, where to go, what kind of track) is instant and runs on the phone; Jen's job is to make the track for that decision.
 
@@ -117,7 +117,7 @@ node scripts/build-manifest.js
 
 ## 5b. With Spotify
 
-**Now → Spotify.** While Spotify plays on your phone, MoodPath checks every few seconds:
+**Now → Spotify.** While Spotify plays on your phone, HealthySongs checks every few seconds:
 
 - **Is this song helping?** If you placed it on the map (the *This song feels…* chips) or it's in one of your zone playlists, it knows where the song sits. It says *not helping* when the song is angry or sad music, or darker or more intense than you are. For songs it can't place, it watches you: if you get clearly worse for 15 s while it plays, it counts as not helping.
 - **What next?** A song one step lighter than you, toward where you're heading (Balance by default).
@@ -127,7 +127,7 @@ node scripts/build-manifest.js
 **Setup (once, ~5 minutes):**
 
 1. https://developer.spotify.com/dashboard → *Create app* → tick *Web API*.
-2. In the app's settings, add the **Redirect URI** that MoodPath shows in Settings → Spotify. With `npx expo start --tunnel` it is `https://<your-tunnel>.exp.direct/spotify-relay`: Spotify only accepts https for new apps, so a tiny page in `metro.config.js` receives the answer and forwards it to Expo Go. The tunnel name is stored in `.expo/settings.json`, so it stays the same between runs.
+2. In the app's settings, add the **Redirect URI** that HealthySongs shows in Settings → Spotify. With `npx expo start --tunnel` it is `https://<your-tunnel>.exp.direct/spotify-relay`: Spotify only accepts https for new apps, so a tiny page in `metro.config.js` receives the answer and forwards it to Expo Go. The tunnel name is stored in `.expo/settings.json`, so it stays the same between runs.
 3. *User Management*: add your Spotify account's email. New apps are in Development mode, which only lets listed users in (max 5), and **the app owner needs Spotify Premium**.
 4. Copy the **Client ID** into Settings → Spotify (or `EXPO_PUBLIC_SPOTIFY_CLIENT_ID` in `.env.local`). There's no secret: sign-in uses PKCE.
 5. Optional but recommended: make a few playlists of your own (Calm, Gentle, Focus, Warm lift, Bright, Steady energy) and paste their links in Settings → Spotify. Suggestions then come from music you chose. Without them it searches Spotify by keywords and labels those suggestions as a guess.

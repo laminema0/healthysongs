@@ -13,9 +13,9 @@ const config = getDefaultConfig(__dirname);
 
 const relayPage = (target) => `<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Back to MoodPath</title>
+<title>Back to HealthySongs</title>
 <style>body{font:16px system-ui,sans-serif;background:#0F1413;color:#E9ECE8;padding:32px}a{color:#B195DA}</style>
-</head><body><p>Signed in. Going back to MoodPath…</p><p><a id="go" href="${target}">Tap here if nothing happens</a></p>
+</head><body><p>Signed in. Going back to HealthySongs…</p><p><a id="go" href="${target}">Tap here if nothing happens</a></p>
 <script>location.replace(document.getElementById('go').href);</script></body></html>`;
 
 const upstream = config.server.enhanceMiddleware;

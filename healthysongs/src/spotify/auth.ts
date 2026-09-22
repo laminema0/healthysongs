@@ -29,7 +29,7 @@ const appReturnUrl = () => Linking.createURL('spotify-auth');
  * The URI to register in the Spotify dashboard. Spotify rejects exp:// for new
  * apps, so when the dev server runs with --tunnel (public https address) we
  * use the small relay page in metro.config.js, which forwards to the app.
- * Otherwise (LAN, or a real build with the moodpath:// scheme) it's the app URL.
+ * Otherwise (LAN, or a real build with the healthysongs:// scheme) it's the app URL.
  */
 export function spotifyRedirectUri(): string {
   const app = appReturnUrl();

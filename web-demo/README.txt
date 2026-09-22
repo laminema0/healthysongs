@@ -1,4 +1,4 @@
-MoodPath Live (web demo)
+HealthySongs Live (web demo)
 
 In VS Code: press Ctrl+Shift+B (with the "music" folder open).
 Without VS Code: double-click start-live-demo.bat.

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="data:,">
-<title>MoodPath Live</title>
+<title>HealthySongs Live</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -70,7 +70,7 @@
 <body>
 <div class="wrap">
   <p class="eyebrow">10-Day Challenge · live prototype</p>
-  <h1>MoodPath Live</h1>
+  <h1>HealthySongs Live</h1>
   <p class="sub">Turn on the camera and press Play. It reads your expression every fraction of a second, places you on the map, and the music follows: it meets you a step lighter than you feel (never angrier or sadder than you), then leads you toward the target, but never more than a step ahead. If you don't follow, it waits. If you get worse, it comes back to meet you, still a step lighter. <b>Balance</b> picks the direction for you: tense → calm, low → gently brighter. The feed on the right says why.</p>
 
   <div class="grid">
@@ -127,7 +127,7 @@
   const region = m =>
     m.v < -0.2 && m.a > 0.2 ? 'tense' : m.v < -0.2 && m.a < -0.2 ? 'heavy' : m.v > 0.2 && m.a > 0.2 ? 'bright'
     : m.v > 0.2 && m.a < -0.2 ? 'calm' : m.a < -0.2 ? 'flat' : m.a > 0.2 ? 'restless' : m.v < -0.2 ? 'a bit down' : m.v > 0.2 ? 'good' : 'neutral';
-  // Regulation (same rules as the app, moodpath/src/engine/regulate.ts):
+  // Regulation (same rules as the app, healthysongs/src/engine/regulate.ts):
   // the music meets you a step lighter, never deeper into the feeling, and
   // never sits in the angry (tense) or sad (heavy) corners of the map.
   function autoTarget(m) {

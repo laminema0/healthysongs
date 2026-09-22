@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Tiny local server for MoodPath Live. No installs needed, only Node.js.
+ * Tiny local server for HealthySongs Live. No installs needed, only Node.js.
  *
  *   node web-demo/serve.js          (or: Terminal → Run Task → "1 · Live demo" in VS Code)
  *
@@ -40,7 +40,7 @@ server.on('error', (e) => {
 
 server.listen(PORT, '127.0.0.1', () => {
   const url = `http://localhost:${PORT}/live.html`;
-  console.log(`MoodPath Live ready at ${url}`);
+  console.log(`HealthySongs Live ready at ${url}`);
   console.log('Allow the camera when the browser asks. Press Ctrl+C here to stop.');
   if (!process.env.NO_OPEN) {
     const cmd = process.platform === 'win32' ? `start "" "${url}"` : process.platform === 'darwin' ? `open "${url}"` : `xdg-open "${url}"`;

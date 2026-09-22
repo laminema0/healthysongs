@@ -57,7 +57,7 @@ export default function Settings() {
 
   const exportLog = async () => {
     const payload = { exportedAt: new Date().toISOString(), settings, events: log };
-    await Share.share({ title: 'moodpath-log.json', message: JSON.stringify(payload, null, 1) });
+    await Share.share({ title: 'healthysongs-log.json', message: JSON.stringify(payload, null, 1) });
   };
 
   return (
@@ -160,7 +160,7 @@ export default function Settings() {
       </Card>
 
       <Button title="Show the consent screen again" kind="ghost" onPress={() => setConsent(false)} />
-      <Small style={{ textAlign: 'center' }}>MoodPath · 10-Day Challenge prototype · working name</Small>
+      <Small style={{ textAlign: 'center' }}>HealthySongs · 10-Day Challenge prototype</Small>
     </ScrollView>
   );
 }

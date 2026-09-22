@@ -25,7 +25,7 @@ Without VS Code: double-click `web-demo/start-live-demo.bat`.
 
 ---
 
-## B. The phone app (MoodPath)
+## B. The phone app (HealthySongs)
 
 Install **Expo Go** on your phone (App Store / Play Store). Phone and laptop on the same Wi-Fi.
 
@@ -35,7 +35,7 @@ Install **Expo Go** on your phone (App Store / Play Store). Phone and laptop on 
 
 If the phone can't connect, use **3b · with tunnel** instead.
 
-**Jen:** the key is already in `moodpath/.env.local`. To fill the library with composed tracks once:
+**Jen:** the key is already in `healthysongs/.env.local`. To fill the library with composed tracks once:
 Run Task → **4 · Jen: compose 9 tracks**. Then restart task 3.
 
 ---
@@ -48,8 +48,8 @@ Run Task → **4 · Jen: compose 9 tracks**. Then restart task 3.
 | *Port 8123 is already in use* | It's already running. Open http://localhost:8123/live.html |
 | Camera blocked | Click the camera icon in the address bar → Allow, reload. Close other apps using the camera (Zoom, Teams). |
 | Box never appears around your face | More light on your face, face the camera, turn up *Face sensitivity*. |
-| `npm install` very slow or errors about files in use | OneDrive is syncing `node_modules`. Pause OneDrive while installing, or copy `moodpath` to `C:\dev\moodpath` and run it from there. |
+| `npm install` very slow or errors about files in use | OneDrive is syncing `node_modules`. Pause OneDrive while installing, or copy `healthysongs` to `C:\dev\healthysongs` and run it from there. |
 | PowerShell says scripts are disabled (npx.ps1) | Run once in a terminal: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` and answer Y. |
 | Expo QR won't connect | Use task 3b (tunnel). Check the phone isn't on mobile data. |
 
-Folder map: `web-demo/` live browser demo · `moodpath/` phone app · `docs/` brief, process map, survey, AI log.
+Folder map: `web-demo/` live browser demo · `healthysongs/` phone app · `docs/` brief, process map, survey, AI log.

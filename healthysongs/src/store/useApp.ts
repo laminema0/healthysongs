@@ -214,7 +214,7 @@ export const useApp = create<AppState>()(
       },
     }),
     {
-      name: 'moodpath-v1',
+      name: 'healthysongs-v1',
       storage: createJSONStorage(() => AsyncStorage),
       // fusion state and the active journey are session-only
       partialize: (s) => ({

@@ -1,5 +1,5 @@
 /**
- * With Spotify: MoodPath as a companion to what's playing on your phone.
+ * With Spotify: HealthySongs as a companion to what's playing on your phone.
  *
  * Every few seconds it looks at the song Spotify is playing and at how you
  * seem, and answers two questions:
@@ -202,9 +202,9 @@ export default function SpotifyScreen() {
     const clientId = spotifyClientIdFrom(settings);
     return (
       <ScrollView style={{ backgroundColor: T.bg }} contentContainerStyle={{ padding: 20, gap: 16 }}>
-        <Title>MoodPath with Spotify</Title>
+        <Title>HealthySongs with Spotify</Title>
         <Body>
-          While Spotify plays on your phone, MoodPath watches how you seem. If a song is pushing you deeper into anger or sadness, it tells you and suggests
+          While Spotify plays on your phone, HealthySongs watches how you seem. If a song is pushing you deeper into anger or sadness, it tells you and suggests
           something a step lighter, and can queue or play it for you.
         </Body>
         <Small>Needs Spotify Premium to queue, play or skip (Spotify's rule). Without Premium it can still show what's playing and suggest.</Small>

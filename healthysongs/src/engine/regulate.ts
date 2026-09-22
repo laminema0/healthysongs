@@ -1,5 +1,5 @@
 /**
- * Regulation: the rules that keep MoodPath on the person's side.
+ * Regulation: the rules that keep HealthySongs on the person's side.
  *
  * The point of the app is a steadier state, not a louder version of the one
  * the person is already in. Matching (the iso-principle) is only a way to be

@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "MoodPath",
-    "slug": "moodpath",
+    "name": "HealthySongs",
+    "slug": "healthysongs",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "moodpath",
+    "scheme": "healthysongs",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#0F1413",
     "ios": {
       "icon": "./assets/expo.icon",
       "infoPlist": {
-        "NSCameraUsageDescription": "MoodPath reads your facial expression on the phone to sense how you feel. Frames are never stored or sent anywhere."
+        "NSCameraUsageDescription": "HealthySongs reads your facial expression on the phone to sense how you feel. Frames are never stored or sent anywhere."
       }
     },
     "android": {
@@ -33,7 +33,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "MoodPath reads your facial expression on the phone to sense how you feel. Frames are never stored or sent anywhere."
+          "cameraPermission": "HealthySongs reads your facial expression on the phone to sense how you feel. Frames are never stored or sent anywhere."
         }
       ],
       [

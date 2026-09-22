@@ -1,5 +1,5 @@
 /**
- * The few Spotify Web API calls MoodPath needs. Paths follow the February
+ * The few Spotify Web API calls HealthySongs needs. Paths follow the February
  * 2026 changes (playlist `/items`, search limit 10).
  *
  * Playback control (queue, play, skip) needs Spotify Premium and an active

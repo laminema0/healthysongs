@@ -58,7 +58,7 @@ export function FaceSensor({ onState }: { onState?: (s: FaceSensorState) => void
       <WebView
         style={showPreview ? styles.web : styles.webHidden}
         originWhitelist={['*']}
-        source={{ html, baseUrl: 'https://moodpath.local/' }}
+        source={{ html, baseUrl: 'https://healthysongs.local/' }}
         onMessage={onMessage}
         javaScriptEnabled
         allowsInlineMediaPlayback
