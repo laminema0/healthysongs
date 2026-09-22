@@ -1,0 +1,5 @@
+{
+  "files.exclude": { "**/node_modules": true, "_archive": true, "**/.expo": true },
+  "search.exclude": { "**/node_modules": true, "**/vendor": true },
+  "terminal.integrated.defaultProfile.windows": "PowerShell"
+}

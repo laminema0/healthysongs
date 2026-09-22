@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>MoodPath Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Single dark theme on purpose: this is the app's own look. Every colour is painted explicitly. */
+  :root{
+    --page:#0B0F0E; --bg:#0F1413; --surface:#171E1C; --surface2:#1F2826; --line:#2A3532;
+    --ink:#E9ECE8; --muted:#8E9C96; --faint:#5C6B65;
+    --you:#5FB8B0; --sys:#B195DA; --warm:#E0A458; --danger:#D97A6B;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--page);color:var(--ink);font-family:Manrope,system-ui,sans-serif}
+  button,input{font-family:inherit}
+  :focus-visible{outline:2px solid var(--you);outline-offset:2px}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  .eyebrow{font:500 11px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  h1{margin:0;font-size:clamp(26px,4vw,34px);font-weight:800;letter-spacing:-.02em}
+  .sub{margin:8px 0 22px;color:var(--muted);max-width:68ch;line-height:1.55;font-size:15px}
+  .grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;align-items:start}
+  @media (max-width:920px){.grid{grid-template-columns:minmax(0,1fr)}}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+  .card h2{margin:0;font-size:15px;font-weight:700}
+  .label{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .small{font-size:13px;line-height:1.5;color:var(--muted)}
+  .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .between{justify-content:space-between}
+  .big{font-size:24px;font-weight:800;letter-spacing:-.01em}
+  .btn{border:0;border-radius:12px;padding:12px 16px;font-size:15px;font-weight:700;cursor:pointer;background:var(--you);color:var(--bg)}
+  .btn.sys{background:var(--sys)}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .btn:disabled{opacity:.5;cursor:default}
+  .cam{position:relative;border-radius:12px;overflow:hidden;background:#050706;aspect-ratio:4/3}
+  .cam video,.cam canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+  .cam .msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:var(--muted);font-size:14px;line-height:1.5}
+  .status{font:500 12px "JetBrains Mono",monospace;color:var(--muted)}
+  .status b{color:var(--you);font-weight:500}
+  .bars{display:grid;grid-template-columns:78px 1fr 38px;gap:6px 10px;align-items:center;font-size:12.5px}
+  .bars .t{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden}
+  .bars .f{height:100%;background:var(--you);width:0;transition:width .2s}
+  .bars .n{font:500 11px "JetBrains Mono",monospace;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:999px;padding:8px 13px;font-weight:600;font-size:14px;cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--sys);border-color:var(--sys);color:var(--bg)}
+  svg.map{display:block;width:100%;height:auto;max-width:420px;margin:0 auto;cursor:crosshair}
+  .feed{display:flex;flex-direction:column;gap:8px;max-height:330px;overflow:auto}
+  .ev{display:grid;grid-template-columns:62px 1fr;gap:10px;font-size:14px;line-height:1.45;padding:8px 10px;border-radius:10px;background:var(--surface2)}
+  .ev .ts{font:500 11px "JetBrains Mono",monospace;color:var(--faint);padding-top:2px}
+  .ev.match{border-left:3px solid var(--you)}
+  .ev.lead{border-left:3px solid var(--sys)}
+  .ev.hold{border-left:3px solid var(--warm)}
+  .ev.there{border-left:3px solid var(--you)}
+  .params{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+  .param{background:var(--surface2);border-radius:10px;padding:10px 12px}
+  .param .v{font-size:18px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+  code.prompt{display:block;font:12.5px/1.6 "JetBrains Mono",monospace;color:#d4cbe6;background:#1a1622;border-radius:10px;padding:10px 12px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .ctl{display:flex;flex-direction:column;gap:4px}
+  input[type=range]{width:100%;accent-color:var(--sys)}
+  .val{font:500 12px "JetBrains Mono",monospace;color:var(--ink)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">10-Day Challenge · live prototype</p>
+  <h1>MoodPath Live</h1>
+  <p class="sub">Turn on the camera and press Play. It reads your expression every fraction of a second, places you on the map, and the music follows: it meets you a step lighter than you feel (never angrier or sadder than you), then leads you toward the target, but never more than a step ahead. If you don't follow, it waits. If you get worse, it comes back to meet you, still a step lighter. <b>Balance</b> picks the direction for you: tense → calm, low → gently brighter. The feed on the right says why.</p>
+
+  <div class="grid">
+    <div class="col">
+      <section class="card">
+        <div class="row between"><h2>Camera</h2><span class="status" id="camStatus">off</span></div>
+        <div class="cam"><video id="video" playsinline muted></video><canvas id="overlay"></canvas><div class="msg" id="camMsg">Camera is off. Nothing is recorded or sent anywhere; frames are read in this browser and thrown away.</div></div>
+        <div class="row"><button class="btn" id="camBtn">Turn camera on</button><span class="small">No camera? Click the map to say how you feel.</span></div>
+        <div class="bars" id="bars"></div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card">
+        <div class="row between">
+          <div><div class="label">You seem</div><div class="big" id="youSeem" style="color:var(--you)">—</div></div>
+          <div style="text-align:right"><div class="label">The music is</div><div class="big" id="musicIs" style="color:var(--sys)">silent</div></div>
+        </div>
+        <svg class="map" id="map" viewBox="0 0 420 420" role="img" aria-label="Mood map. Left unpleasant, right pleasant, top high energy, bottom low energy."></svg>
+        <div class="legend"><span><i style="background:var(--you)"></i>you, from your face</span><span><i style="background:var(--sys)"></i>where the music is</span><span><i style="border:1.5px solid var(--sys);background:transparent"></i>target</span></div>
+        <div class="label">Take me to</div>
+        <div class="chips" id="chips"></div>
+        <div class="row"><button class="btn sys" id="playBtn">Play</button><span class="small" id="playHint">Sound starts after you press Play (browsers require a click).</span></div>
+      </section>
+
+      <section class="card">
+        <h2>Why the music is doing this</h2>
+        <div class="feed" id="feed" aria-live="polite"></div>
+      </section>
+
+      <section class="card">
+        <h2>The music right now</h2>
+        <div class="params">
+          <div class="param"><div class="label">Tempo</div><div class="v" id="pTempo">—</div></div>
+          <div class="param"><div class="label">Key</div><div class="v" id="pKey">—</div></div>
+          <div class="param"><div class="label">Energy</div><div class="v" id="pEnergy">—</div></div>
+          <div class="param"><div class="label">Brightness</div><div class="v" id="pBright">—</div></div>
+        </div>
+        <div class="label">What the phone app would ask Jen to compose for this point</div>
+        <code class="prompt" id="prompt">—</code>
+        <div class="ctl"><span class="label">How far the music may lead ahead of you <span class="val" id="leadVal">0.35</span></span><input type="range" id="lead" min="0.1" max="1" step="0.05" value="0.35"></div>
+        <div class="ctl"><span class="label">Face sensitivity <span class="val" id="gainVal">1.6</span></span><input type="range" id="gain" min="0.6" max="3" step="0.1" value="1.6"></div>
+        <p class="small" style="margin:0">Tip: the expression model reacts to clear expressions. For a demo, frown and tense your brows, then relax and smile slowly, and watch the dots and the sound follow.</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // ================= model =================
+  const clamp = (x, lo = -1, hi = 1) => Math.max(lo, Math.min(hi, x));
+  const dist = (a, b) => Math.hypot(a.v - b.v, (a.a - b.a) * 1.2);
+  const region = m =>
+    m.v < -0.2 && m.a > 0.2 ? 'tense' : m.v < -0.2 && m.a < -0.2 ? 'heavy' : m.v > 0.2 && m.a > 0.2 ? 'bright'
+    : m.v > 0.2 && m.a < -0.2 ? 'calm' : m.a < -0.2 ? 'flat' : m.a > 0.2 ? 'restless' : m.v < -0.2 ? 'a bit down' : m.v > 0.2 ? 'good' : 'neutral';
+  // Regulation (same rules as the app, moodpath/src/engine/regulate.ts):
+  // the music meets you a step lighter, never deeper into the feeling, and
+  // never sits in the angry (tense) or sad (heavy) corners of the map.
+  function autoTarget(m) {
+    const r = region(m);
+    if (r === 'tense') return { v: 0.45, a: -0.45 };
+    if (r === 'restless') return { v: 0.35, a: -0.2 };
+    if (r === 'heavy') return { v: 0.5, a: 0.05 };
+    if (r === 'a bit down') return { v: 0.55, a: 0.1 };
+    if (r === 'flat') return { v: 0.3, a: 0.05 };
+    if (r === 'bright') return { v: Math.max(0.5, m.v), a: Math.min(0.35, m.a) };
+    return { v: Math.max(0.35, m.v), a: clamp(m.a, -0.4, 0.2) };
+  }
+  function safeMeet(L, T, lift = 0.25) {
+    const p = { v: L.v + (T.v - L.v) * lift, a: L.a + (T.a - L.a) * lift };
+    if (L.v < -0.1) p.v = Math.max(p.v, L.v + 0.15);
+    if (L.v < -0.1 && L.a > 0.15) p.a = Math.min(p.a, L.a - 0.1);
+    return keepOutOfDark(p);
+  }
+  function keepOutOfDark(m) {
+    // never angry or sad music: nudge out of those corners toward neutral
+    const r = region(m);
+    return r === 'tense' || r === 'heavy' ? { v: -0.19, a: m.a } : m;
+  }
+  const TARGETS = [
+    { key: 'balance', label: 'Balance', get m() { return autoTarget(S.live); } },
+    { key: 'calm', label: 'Calm', m: { v: 0.5, a: -0.6 } },
+    { key: 'bright', label: 'Bright', m: { v: 0.7, a: 0.45 } },
+    { key: 'focus', label: 'Focus', m: { v: 0.25, a: -0.05 } },
+    { key: 'winddown', label: 'Wind down', m: { v: 0.2, a: -0.9 } },
+  ];
+  function promptFor(m) {
+    const a = (m.a + 1) / 2, v = m.v, bpm = Math.round(56 + a * 72);
+    const mode = v < -0.45 ? 'minor key, melancholic, dark harmonies' : v < -0.1 ? 'minor key, reflective, bittersweet' : v < 0.25 ? 'modal, neutral and open, unresolved' : v < 0.55 ? 'major key, warm, gentle' : 'major key, bright, uplifting';
+    const energy = a < .2 ? 'very slow, soft dynamics, lots of space and silence' : a < .42 ? 'slow, calm, soft dynamics' : a < .6 ? 'steady mid-tempo groove, moderate dynamics' : a < .8 ? 'energetic, clear rhythmic drive' : 'driving, intense, dense rhythm';
+    const inst = { tense: 'pulsing analog synths, tight electronic drums, tense staccato strings', heavy: 'solo felt piano, low cello, distant ambient pads', bright: 'indie pop band, bright electric guitars, handclaps, light synth lead', calm: 'warm acoustic guitar, soft piano, light strings, gentle brushed percussion', flat: 'muted electric piano, soft ambient textures, subtle tape hiss', restless: 'nervous arpeggiated synths, busy hi-hats, plucked bass', 'a bit down': 'lo-fi electric piano, dusty drums, mellow bass', good: 'acoustic guitar, upright bass, light percussion, warm keys', neutral: 'electric piano, soft drums, round bass' }[region(m)];
+    const texture = a < .35 ? 'slowly evolving, minimal, no sudden changes' : a > .7 ? 'layered and full, builds momentum' : 'balanced, smooth transitions';
+    const cap = s => s[0].toUpperCase() + s.slice(1);
+    return `Instrumental, no vocals. ${cap(inst)}. ${cap(mode)}. ${cap(energy)}, around ${bpm} BPM. ${cap(texture)}.`;
+  }
+
+  // ================= state =================
+  const S = {
+    live: { v: 0, a: 0 }, raw: null, hasFace: false, source: 'none',
+    music: { v: 0, a: 0 }, target: TARGETS[0], playing: false,
+    phase: 'idle', phaseSince: 0, lead: 0.35, gain: 1.6,
+    history: [], lastEv: '', expr: null,
+  };
+
+  // ================= feed =================
+  const $feed = document.getElementById('feed');
+  function say(kind, text) {
+    if (text === S.lastEv) return;
+    S.lastEv = text;
+    const d = document.createElement('div');
+    d.className = 'ev ' + kind;
+    const ts = new Date().toTimeString().slice(0, 8);
+    d.innerHTML = `<span class="ts">${ts}</span><span></span>`;
+    d.lastChild.textContent = text;
+    $feed.prepend(d);
+    while ($feed.children.length > 40) $feed.lastChild.remove();
+  }
+  say('match', 'Waiting. Turn on the camera or click the map, then press Play.');
+
+  // ================= face =================
+  const EXPR = ['neutral', 'happy', 'sad', 'angry', 'fearful', 'disgusted', 'surprised'];
+  const $bars = document.getElementById('bars');
+  $bars.innerHTML = EXPR.map(e => `<span>${e}</span><div class="t"><div class="f" id="b-${e}"></div></div><span class="n" id="n-${e}">0</span>`).join('');
+
+  function exprToMood(x) {
+    const v = x.happy * 1.0 + x.surprised * 0.15 - x.sad * 0.8 - x.angry * 0.9 - x.fearful * 0.7 - x.disgusted * 0.8;
+    const a = x.angry * 0.8 + x.fearful * 0.8 + x.surprised * 0.9 + x.happy * 0.35 + x.disgusted * 0.3 - x.sad * 0.45 - x.neutral * 0.35;
+    return { v: clamp(v * S.gain), a: clamp(a * S.gain) };
+  }
+
+  function loadScript(src) {
+    return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+  }
+  const CDN = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.15';
+  async function loadFaceApi() {
+    // local copy first (the version in your music folder works offline), then the CDN
+    const sources = [['./vendor/face-api.js', './vendor/model'], [CDN + '/dist/face-api.js', CDN + '/model']];
+    let lastErr;
+    for (const [js, model] of sources) {
+      try {
+        if (!window.faceapi) await loadScript(js);
+        await faceapi.nets.tinyFaceDetector.loadFromUri(model);
+        await faceapi.nets.faceExpressionNet.loadFromUri(model);
+        return;
+      } catch (e) { lastErr = e; }
+    }
+    throw lastErr || new Error('could not load the face model');
+  }
+
+  const $video = document.getElementById('video'), $overlay = document.getElementById('overlay');
+  const $camMsg = document.getElementById('camMsg'), $camStatus = document.getElementById('camStatus'), $camBtn = document.getElementById('camBtn');
+  let camOn = false, detecting = false;
+
+  async function startCamera() {
+    $camBtn.disabled = true;
+    try {
+      $camMsg.textContent = 'Loading the face model…'; $camStatus.textContent = 'loading';
+      await loadFaceApi();
+      $camMsg.textContent = 'Asking for the camera…';
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 480 }, height: { ideal: 360 } }, audio: false });
+      $video.srcObject = stream;
+      await $video.play();
+      $camMsg.style.display = 'none';
+      camOn = true; $camBtn.textContent = 'Camera on'; $camStatus.innerHTML = '<b>reading</b>';
+      say('match', 'Camera on. Reading your expression about five times a second.');
+      detectLoop();
+    } catch (e) {
+      $camBtn.disabled = false;
+      const blocked = /NotAllowed|Permission|denied|policy/i.test(String(e && (e.name + e.message)));
+      $camStatus.textContent = 'unavailable';
+      $camMsg.innerHTML = blocked
+        ? 'The camera was blocked here.<br>This page can’t use the camera inside the Claude viewer. Open <b>web-demo/live.html</b> from your music folder instead (double-click <b>start-live-demo.bat</b>). Clicking the map works meanwhile.'
+        : 'Couldn’t load the face model here (' + (e && e.message ? e.message : e) + ').<br>Open the local version: double-click <b>start-live-demo.bat</b> in your music folder. Clicking the map works meanwhile.';
+    }
+  }
+  $camBtn.addEventListener('click', startCamera);
+
+  async function detectLoop() {
+    if (!camOn) return;
+    if (!detecting && $video.readyState >= 2) {
+      detecting = true;
+      try {
+        const r = await faceapi.detectSingleFace($video, new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.4 })).withFaceExpressions();
+        const ctx = $overlay.getContext('2d');
+        $overlay.width = $video.videoWidth; $overlay.height = $video.videoHeight;
+        ctx.clearRect(0, 0, $overlay.width, $overlay.height);
+        if (r) {
+          const b = r.detection.box;
+          ctx.strokeStyle = '#5FB8B0'; ctx.lineWidth = 3; ctx.strokeRect(b.x, b.y, b.width, b.height);
+          S.expr = r.expressions; S.hasFace = true; S.source = 'face';
+          const m = exprToMood(r.expressions);
+          // smoothing: ~1.5 s time constant at ~5 Hz
+          S.live = { v: S.live.v + (m.v - S.live.v) * 0.14, a: S.live.a + (m.a - S.live.a) * 0.14 };
+          $camStatus.innerHTML = '<b>face found</b>';
+        } else {
+          S.hasFace = false; $camStatus.textContent = 'no face in view';
+        }
+        renderBars();
+      } catch (e) { $camStatus.textContent = 'error: ' + e.message; }
+      detecting = false;
+    }
+    setTimeout(detectLoop, 180);
+  }
+  function renderBars() {
+    for (const e of EXPR) {
+      const p = S.expr ? S.expr[e] || 0 : 0;
+      document.getElementById('b-' + e).style.width = (p * 100).toFixed(0) + '%';
+      document.getElementById('n-' + e).textContent = (p * 100).toFixed(0);
+    }
+  }
+
+  // ================= map =================
+  const $map = document.getElementById('map');
+  const P = 34, IN = 420 - P * 2, X = v => P + (v + 1) / 2 * IN, Y = a => P + (1 - a) / 2 * IN;
+  function drawMap() {
+    const q = (x, y, c, o) => `<rect x="${x}" y="${y}" width="${IN / 2}" height="${IN / 2}" fill="${c}" opacity="${o}"/>`;
+    const lab = (x, y, t, anc = 'middle', extra = '') => `<text x="${x}" y="${y}" fill="#5C6B65" font-size="11" font-family="Manrope, system-ui, sans-serif" letter-spacing="1" text-anchor="${anc}" ${extra}>${t}</text>`;
+    const trail = S.history.slice(-40);
+    let s = `<defs><clipPath id="c"><rect x="${P}" y="${P}" width="${IN}" height="${IN}" rx="18"/></clipPath></defs>
+      <rect x="${P}" y="${P}" width="${IN}" height="${IN}" rx="18" fill="#171E1C" stroke="#2A3532"/>
+      <g clip-path="url(#c)">${q(P, P, '#D97A6B', .07)}${q(P + IN / 2, P, '#E0A458', .07)}${q(P, P + IN / 2, '#B195DA', .06)}${q(P + IN / 2, P + IN / 2, '#5FB8B0', .08)}</g>
+      <line x1="${X(0)}" y1="${P}" x2="${X(0)}" y2="${P + IN}" stroke="#2A3532" stroke-dasharray="3 5"/><line x1="${P}" y1="${Y(0)}" x2="${P + IN}" y2="${Y(0)}" stroke="#2A3532" stroke-dasharray="3 5"/>
+      ${lab(210, P - 12, 'HIGH ENERGY')}${lab(210, 420 - 10, 'LOW ENERGY')}
+      ${lab(P - 12, 210, 'UNPLEASANT', 'middle', `transform="rotate(-90 ${P - 12} 210)"`)}${lab(420 - P + 16, 210, 'PLEASANT', 'middle', `transform="rotate(90 ${420 - P + 16} 210)"`)}
+      ${lab(P + 12, P + 20, 'tense', 'start')}${lab(P + IN - 12, P + 20, 'bright', 'end')}${lab(P + 12, P + IN - 12, 'heavy', 'start')}${lab(P + IN - 12, P + IN - 12, 'calm', 'end')}`;
+    if (trail.length > 1) s += `<path d="${trail.map((p, i) => `${i ? 'L' : 'M'}${X(p.music.v).toFixed(1)} ${Y(p.music.a).toFixed(1)}`).join(' ')}" stroke="#B195DA" stroke-width="2" fill="none" opacity=".45"/>`;
+    const T = S.target.m;
+    s += `<circle cx="${X(T.v)}" cy="${Y(T.a)}" r="13" fill="none" stroke="#B195DA" stroke-width="2"/><circle cx="${X(T.v)}" cy="${Y(T.a)}" r="3.5" fill="#B195DA"/>`;
+    if (S.playing) {
+      s += `<line x1="${X(S.live.v)}" y1="${Y(S.live.a)}" x2="${X(S.music.v)}" y2="${Y(S.music.a)}" stroke="#B195DA" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`;
+      s += `<circle cx="${X(S.music.v)}" cy="${Y(S.music.a)}" r="9" fill="#B195DA"/>`;
+    }
+    if (S.source !== 'none') s += `<circle cx="${X(S.live.v)}" cy="${Y(S.live.a)}" r="18" fill="#5FB8B0" opacity=".2"/><circle cx="${X(S.live.v)}" cy="${Y(S.live.a)}" r="8" fill="#5FB8B0"/>`;
+    $map.innerHTML = s;
+  }
+  $map.addEventListener('click', e => {
+    const r = $map.getBoundingClientRect(), k = 420 / r.width;
+    const m = { v: clamp((((e.clientX - r.left) * k - P) / IN) * 2 - 1), a: clamp(1 - (((e.clientY - r.top) * k - P) / IN) * 2) };
+    S.live = m; S.source = S.source === 'face' ? 'face' : 'manual';
+    say('match', `You placed yourself at “${region(m)}”.`);
+  });
+
+  // ================= the judgment =================
+  // Runs every 500 ms. Decides where the music should sit, relative to you and the target.
+  const STEP = 0.022; // how far the music moves per tick when leading
+  function judge() {
+    const now = performance.now();
+    S.history.push({ t: now, live: { ...S.live }, music: { ...S.music } });
+    if (S.history.length > 200) S.history.shift();
+    if (!S.playing) { S.music = safeMeet(S.live, S.target.m); return; }
+
+    const L = S.live, M = S.music, T = S.target.m;
+    const dLT = dist(L, T), dMT = dist(M, T), dML = dist(M, L);
+    const past = S.history.find(h => now - h.t > 8000 && now - h.t < 9000) || S.history[0];
+    const drift = past ? dist(L, T) - dist(past.live, T) : 0; // > 0: you moved away from the target
+
+    let next = { ...M }, phase = S.phase;
+
+    if (phase === 'match') {
+      const meet = safeMeet(L, T);
+      next = { v: M.v + (meet.v - M.v) * 0.35, a: M.a + (meet.a - M.a) * 0.35 };
+      if (now - S.phaseSince > 6000) phase = 'lead';
+      say('match', region(L) === region(meet)
+        ? `Meeting you first: you seem ${region(L)}, so the music starts there, a shade lighter.`
+        : `Meeting you first: you seem ${region(L)}, so the music starts one step lighter (${region(meet)}), not deeper.`);
+    } else if (drift > 0.3 && dML > 0.25) {
+      phase = 'match';
+      next = safeMeet(L, T);
+      say('match', `Something shifted: you look ${region(L)} now. Coming back to meet you, a step lighter (${region(next)}), before moving on.`);
+    } else if (dLT < 0.2 && dMT < 0.18) {
+      phase = 'there';
+      next = { v: M.v + (T.v - M.v) * 0.2, a: M.a + (T.a - M.a) * 0.2 };
+      say('there', `You’re there. Holding ${S.target.label.toLowerCase()}.`);
+    } else if (dML > S.lead && dLT < dMT) {
+      phase = 'lead';
+      // you moved toward the target faster than the music: catch up with you
+      next = { v: M.v + (L.v - M.v) * 0.3, a: M.a + (L.a - M.a) * 0.3 };
+      say('lead', `You’re ahead of the music (already ${region(L)}). Catching up with you.`);
+    } else if (dML > S.lead) {
+      phase = 'hold';
+      // too far ahead: ease back toward you
+      const meet = safeMeet(L, T);
+      next = { v: M.v + (meet.v - M.v) * 0.15, a: M.a + (meet.a - M.a) * 0.15 };
+      say('hold', `You haven’t followed yet (still ${region(L)}). Waiting for you instead of pulling harder.`);
+    } else {
+      phase = 'lead';
+      // move toward the target, energy first, but never farther than `lead` from you
+      const dv = T.v - M.v, da = T.a - M.a, len = Math.hypot(dv, da) || 1;
+      const energyFirst = Math.abs(da) > 0.15 ? 1.4 : 1;
+      let cand = { v: M.v + dv / len * STEP, a: M.a + da / len * STEP * energyFirst };
+      if (dist(cand, L) > S.lead) cand = M; // would get too far ahead: stay
+      next = cand;
+      say('lead', dLT < 0.35
+        ? `Nearly at ${S.target.label.toLowerCase()}. Settling in.`
+        : drift < -0.08
+        ? `You’re following: now ${region(L)}, easing toward ${S.target.label.toLowerCase()}. Moving on.`
+        : `Leading gently toward ${S.target.label.toLowerCase()}, a little ahead of how you seem.`);
+    }
+    if (phase !== S.phase) S.phaseSince = now;
+    S.phase = phase;
+    S.music = keepOutOfDark({ v: clamp(next.v), a: clamp(next.a) });
+  }
+
+  // ================= sound (Web Audio, parameters follow S.music) =================
+  let ac = null, master = null, delay = null, nextTime = 0, step16 = 0, chordIdx = 0, sched = null;
+  const MAJOR = [0, 2, 4, 5, 7, 9, 11], MINOR = [0, 2, 3, 5, 7, 8, 10];
+  const PROG_MAJ = [0, 4, 5, 3], PROG_MIN = [0, 5, 2, 6];
+  const midi = n => 440 * Math.pow(2, (n - 69) / 12);
+  const params = () => {
+    const m = S.music, a01 = (m.a + 1) / 2;
+    return { bpm: 56 + a01 * 72, minor: m.v < -0.1, bright: 400 + (m.v + 1) / 2 * 4200 + a01 * 1200, density: 0.2 + a01 * 0.75, drums: m.a > -0.25, a01 };
+  };
+
+  function initAudio() {
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    master = ac.createGain(); master.gain.value = 0.0; master.connect(ac.destination);
+    delay = ac.createDelay(1); delay.delayTime.value = 0.33;
+    const fb = ac.createGain(); fb.gain.value = 0.28; const dlp = ac.createBiquadFilter(); dlp.frequency.value = 2200;
+    delay.connect(dlp); dlp.connect(fb); fb.connect(delay); dlp.connect(master);
+  }
+  function env(g, t, a, peak, d) { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + d); }
+  function voice(type, freq, t, a, peak, d, cutoff, send = 0.2) {
+    const o = ac.createOscillator(); o.type = type; o.frequency.value = freq;
+    const f = ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = cutoff;
+    const g = ac.createGain(); env(g, t, a, peak, d);
+    o.connect(f).connect(g); g.connect(master);
+    if (send) { const s = ac.createGain(); s.gain.value = send; g.connect(s).connect(delay); }
+    o.start(t); o.stop(t + a + d + 0.05);
+  }
+  function kick(t, lvl) { const o = ac.createOscillator(), g = ac.createGain(); o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.15); env(g, t, 0.003, lvl, 0.22); o.connect(g).connect(master); o.start(t); o.stop(t + 0.3); }
+  let noiseBuf = null;
+  function hat(t, lvl) {
+    if (!noiseBuf) { noiseBuf = ac.createBuffer(1, ac.sampleRate * 0.1, ac.sampleRate); const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+    const s = ac.createBufferSource(); s.buffer = noiseBuf; const f = ac.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 7000; const g = ac.createGain(); env(g, t, 0.002, lvl, 0.05);
+    s.connect(f).connect(g).connect(master); s.start(t); s.stop(t + 0.1);
+  }
+  function scheduleStep(t, st) {
+    const p = params(), scale = p.minor ? MINOR : MAJOR, prog = p.minor ? PROG_MIN : PROG_MAJ;
+    const root = 50; // D3
+    if (st % 16 === 0) {
+      chordIdx = (chordIdx + 1) % prog.length;
+      const deg = prog[chordIdx];
+      const barLen = (60 / p.bpm) * 4;
+      [0, 2, 4, 6].forEach((k, i) => {
+        const n = root + 12 + scale[(deg + k) % 7] + (deg + k >= 7 ? 12 : 0);
+        voice(i ? 'sawtooth' : 'triangle', midi(n), t, barLen * 0.35, i ? 0.035 : 0.06, barLen * 0.9, p.bright * 0.6, 0.25);
+      });
+      voice('sine', midi(root - 12 + scale[deg]), t, 0.02, 0.22, barLen * 0.8, 400, 0);
+    }
+    if (st % 16 === 8) { const deg = prog[chordIdx]; voice('sine', midi(root - 12 + scale[deg]), t, 0.02, 0.16, (60 / p.bpm) * 1.5, 400, 0); }
+    // melody / arpeggio: density follows energy
+    if (st % 2 === 0 && Math.random() < p.density) {
+      const deg = prog[chordIdx] + [0, 2, 4, 7, 9][Math.floor(Math.random() * 5)];
+      const n = root + 24 + scale[deg % 7] + Math.floor(deg / 7) * 12;
+      voice(p.a01 > 0.6 ? 'square' : 'triangle', midi(n), t, 0.005, 0.07 + p.a01 * 0.04, 0.25 + (1 - p.a01) * 0.9, p.bright, 0.35);
+    }
+    if (p.drums) {
+      const lvl = 0.25 + p.a01 * 0.45;
+      if (st % 8 === 0 || (p.a01 > 0.65 && st % 4 === 0)) kick(t, lvl);
+      if (p.a01 > 0.45 && st % 2 === 1 && Math.random() < 0.7) hat(t, 0.05 + p.a01 * 0.06);
+    }
+  }
+  function scheduler() {
+    const p = params();
+    const sixteenth = 60 / p.bpm / 4;
+    while (nextTime < ac.currentTime + 0.15) { scheduleStep(nextTime, step16); nextTime += sixteenth; step16 = (step16 + 1) % 64; }
+  }
+
+  const $play = document.getElementById('playBtn');
+  $play.addEventListener('click', async () => {
+    if (!ac) initAudio();
+    if (ac.state === 'suspended') await ac.resume();
+    if (!S.playing) {
+      if (S.source === 'none') { say('hold', 'I don’t know how you feel yet. Turn on the camera or click the map first.'); return; }
+      S.playing = true; S.phase = 'match'; S.phaseSince = performance.now(); S.music = safeMeet(S.live, S.target.m); S.lastEv = '';
+      nextTime = ac.currentTime + 0.05; step16 = 0;
+      sched = setInterval(scheduler, 25);
+      master.gain.cancelScheduledValues(ac.currentTime); master.gain.linearRampToValueAtTime(0.8, ac.currentTime + 1.5);
+      $play.textContent = 'Stop'; document.getElementById('playHint').textContent = 'Playing. Change your expression and listen.';
+    } else {
+      S.playing = false; clearInterval(sched);
+      master.gain.cancelScheduledValues(ac.currentTime); master.gain.linearRampToValueAtTime(0, ac.currentTime + 0.6);
+      $play.textContent = 'Play'; say('match', 'Stopped.');
+    }
+  });
+
+  // ================= controls =================
+  const $chips = document.getElementById('chips');
+  function renderChips() { $chips.innerHTML = TARGETS.map(t => `<button class="chip" data-t="${t.key}" aria-pressed="${t === S.target}">${t.label}</button>`).join(''); }
+  $chips.addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (!b) return; S.target = TARGETS.find(t => t.key === b.dataset.t); renderChips(); if (S.playing) { S.phase = 'match'; S.phaseSince = performance.now(); } say('lead', `New target: ${S.target.label}. Starting from where you are.`); });
+  renderChips();
+  const $lead = document.getElementById('lead'); $lead.addEventListener('input', () => { S.lead = +$lead.value; document.getElementById('leadVal').textContent = S.lead.toFixed(2); });
+  const $gain = document.getElementById('gain'); $gain.addEventListener('input', () => { S.gain = +$gain.value; document.getElementById('gainVal').textContent = S.gain.toFixed(1); });
+
+  // ================= render loop =================
+  function renderInfo() {
+    document.getElementById('youSeem').textContent = S.source === 'none' ? '—' : region(S.live);
+    document.getElementById('musicIs').textContent = S.playing ? region(S.music) : 'silent';
+    const p = params();
+    document.getElementById('pTempo').textContent = S.playing ? Math.round(p.bpm) + ' BPM' : '—';
+    document.getElementById('pKey').textContent = S.playing ? (p.minor ? 'minor' : 'major') : '—';
+    document.getElementById('pEnergy').textContent = S.playing ? Math.round(p.a01 * 100) + '%' : '—';
+    document.getElementById('pBright').textContent = S.playing ? Math.round((S.music.v + 1) / 2 * 100) + '%' : '—';
+    document.getElementById('prompt').textContent = S.playing ? promptFor(S.music) : 'Press Play to see the prompt for where the music is.';
+  }
+  setInterval(() => { judge(); renderInfo(); }, 500);
+  (function frame() { drawMap(); requestAnimationFrame(frame); })();
+  renderBars(); renderInfo();
+})();
+</script>
+</body>
+</html>

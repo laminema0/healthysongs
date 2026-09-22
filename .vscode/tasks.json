@@ -1,0 +1,69 @@
+{
+  // Terminal → Run Task… (or Ctrl+Shift+P → "Tasks: Run Task") and pick one.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1 · Live demo (browser, camera)",
+      "detail": "Starts MoodPath Live on http://localhost:8123 and opens it. Needs only Node.js.",
+      "type": "shell",
+      "command": "node web-demo/serve.js",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "moodpath-live",
+        "pattern": { "regexp": "^__never__$" },
+        "background": { "activelyMatching": true, "beginsPattern": "^.*", "endsPattern": "(ready at|already in use)" }
+      },
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "2 · App: install (first time, takes a few minutes)",
+      "detail": "npm install inside moodpath/",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/moodpath" },
+      "problemMatcher": []
+    },
+    {
+      "label": "3 · App: start (scan the QR code with Expo Go)",
+      "detail": "Phone and laptop on the same Wi-Fi",
+      "type": "shell",
+      "command": "npx expo start",
+      "options": { "cwd": "${workspaceFolder}/moodpath" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "3b · App: start with tunnel (if the QR code won't connect)",
+      "type": "shell",
+      "command": "npx expo start --tunnel",
+      "options": { "cwd": "${workspaceFolder}/moodpath" },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "4 · Jen: compose 9 tracks into the library (about $0.36)",
+      "detail": "Uses the key in moodpath/.env.local, then rebuilds the track list",
+      "type": "shell",
+      "command": "node scripts/jen-seed-library.js; node scripts/build-manifest.js",
+      "windows": { "command": "node scripts/jen-seed-library.js; if ($?) { node scripts/build-manifest.js }" },
+      "options": { "cwd": "${workspaceFolder}/moodpath" },
+      "problemMatcher": []
+    },
+    {
+      "label": "5 · Library: rebuild track list after adding music files",
+      "type": "shell",
+      "command": "node scripts/build-manifest.js",
+      "options": { "cwd": "${workspaceFolder}/moodpath" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Check: Node and npm versions",
+      "type": "shell",
+      "command": "node -v; npm -v",
+      "problemMatcher": []
+    }
+  ]
+}

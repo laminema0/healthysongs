@@ -1,0 +1,23 @@
+# dependencies and build output
+node_modules/
+dist/
+web-build/
+.expo/
+__pycache__/
+*.pyc
+.venv/
+
+# secrets: API keys live here, never commit them
+.env
+.env*.local
+
+# old zipped copies of earlier versions
+_archive/
+
+# local editor / assistant settings
+.claude/
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini

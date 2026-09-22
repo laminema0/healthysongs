@@ -1,0 +1,22 @@
+{
+  // Run and Debug panel (Ctrl+Shift+D) → pick one → press F5.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Live demo in Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8123/live.html",
+      "preLaunchTask": "1 · Live demo (browser, camera)",
+      "webRoot": "${workspaceFolder}/web-demo"
+    },
+    {
+      "name": "Live demo in Edge",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:8123/live.html",
+      "preLaunchTask": "1 · Live demo (browser, camera)",
+      "webRoot": "${workspaceFolder}/web-demo"
+    }
+  ]
+}

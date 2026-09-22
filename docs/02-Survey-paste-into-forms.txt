@@ -1,0 +1,145 @@
+Music & how you feel
+
+This is a short survey (about 6 minutes) for a design research project about music and mood. There are no right answers. Your responses are anonymous unless you choose to leave your contact at the end. You can skip any question.
+
+--- A. About you and your listening ---
+Q1. Age range   [single choice]
+   ( ) 18–24
+   ( ) 25–34
+   ( ) 35–44
+   ( ) 45–54
+   ( ) 55+
+
+Q2. How often do you listen to music?   [single choice]
+   ( ) Several times a day
+   ( ) About once a day
+   ( ) A few times a week
+   ( ) Less than that
+
+Q3. Where do you listen most? (pick up to two)   [multiple choice (several allowed)]
+   ( ) Commuting (public transport / walking / cycling)
+   ( ) Driving
+   ( ) At home
+   ( ) At work or studying
+   ( ) Exercising
+   ( ) Somewhere else
+
+Q4. What do you mostly use to listen?   [single choice]
+   ( ) Spotify
+   ( ) Apple Music
+   ( ) YouTube / YouTube Music
+   ( ) Local files
+   ( ) Radio
+   ( ) Other
+
+Q5. Do you drive regularly (at least once a week)?   [single choice]
+   ( ) Yes
+   ( ) No
+
+--- B. Music and your mood ---
+Q6. How often do you deliberately put music on to change how you feel?   [scale]
+   ( ) Never
+   ( ) Rarely
+   ( ) Sometimes
+   ( ) Often
+   ( ) Almost every time I listen
+
+Q7. When you do, which direction is it usually? (pick all that apply)   [multiple choice (several allowed)]
+   ( ) Calm down
+   ( ) Cheer up
+   ( ) Get energy
+   ( ) Focus
+   ( ) Sit with the feeling and let it out
+   ( ) Fall asleep
+   ( ) Something else
+
+Q8. How do you usually choose that music?   [single choice]
+   ( ) A playlist I made for that feeling
+   ( ) A playlist the app suggests
+   ( ) I search for a specific song
+   ( ) I put on shuffle and skip until it fits
+   ( ) I ask someone / use a voice assistant
+
+Q9. Think of a recent time music actually shifted how you felt. What was going on, what did you put on, and how did the feeling change over the next few songs?   [open text]
+
+Q10. In that moment, would you have wanted music that matched how you felt first and then slowly moved you somewhere else, or music that went straight to where you wanted to be?   [single choice]
+   ( ) Match me first, then move me
+   ( ) Take me straight there
+   ( ) It depends on the mood (please say more)
+   ( ) Neither, I want to choose every song
+
+--- C. How an app should know how you feel ---
+Imagine a music app that tries to understand your emotional state and pick music to move you from where you are to where you want to be.
+
+Q11. How would you be comfortable for it to know how you feel? (pick all that are OK)   [multiple choice (several allowed)]
+   ( ) I tap or slide to tell it
+   ( ) I say it out loud
+   ( ) It reads my tone of voice
+   ( ) It reads my face through the camera
+   ( ) It reads my heart rate from a watch
+   ( ) It guesses from what I've been listening to
+   ( ) None of these
+
+Q12. Rank your top three from the list above, most preferred first.   [open text]
+
+Q13. Where, if anywhere, would you accept a camera reading your expression for this? (pick all that apply)   [multiple choice (several allowed)]
+   ( ) In my car, on the dashboard
+   ( ) At my desk
+   ( ) On my phone, anywhere
+   ( ) Only when I switch it on for a moment
+   ( ) Nowhere
+
+Q14. When the app thinks it has understood your mood, what should it do?   [single choice]
+   ( ) Just change the music
+   ( ) Tell me what it noticed, then change the music
+   ( ) Suggest and wait for me to say yes
+   ( ) Ask me if it's right first
+
+Q15. How much control do you want over the journey?   [single choice]
+   ( ) Fully automatic, I don't want to think about it
+   ( ) Automatic, but I can nudge it (calmer / more energy)
+   ( ) It proposes, I approve each step
+   ( ) I drive, it only suggests
+
+Q16. If the app got your mood wrong, how much would that bother you?   [scale]
+   ( ) Not at all
+   ( ) A little
+   ( ) Somewhat
+   ( ) A lot
+   ( ) I'd stop using it
+
+--- D. Trust and privacy ---
+Q17. How comfortable are you with an app reading your face to understand your emotions, if the images never leave your device?   [scale]
+   ( ) Very uncomfortable
+   ( ) Uncomfortable
+   ( ) Neutral
+   ( ) Comfortable
+   ( ) Very comfortable
+
+Q18. What would make you trust something like this? (pick all that apply)   [multiple choice (several allowed)]
+   ( ) Everything stays on my device
+   ( ) I can see what it detected
+   ( ) I can delete the history
+   ( ) A clear off switch
+   ( ) It's made by a company I know
+   ( ) Nothing would, I don't want it
+
+Q19. Is there anything about this idea that feels wrong or creepy to you? Say it plainly.   [open text]
+
+--- E. The car scenario (only if you drive) ---
+Q20. Picture your phone on a dashboard stand, facing you, playing music that responds to how you look and sound on the drive home after a hard day. Would you try it?   [single choice]
+   ( ) Yes, sounds good
+   ( ) Maybe, I'd need to see it
+   ( ) No
+
+Q21. What would you worry about in the car specifically? (pick all that apply)   [multiple choice (several allowed)]
+   ( ) Distraction
+   ( ) Being watched
+   ( ) It choosing music I hate at the wrong moment
+   ( ) Other people in the car
+   ( ) Nothing
+
+--- F. Wrap up ---
+Q22. If this existed and worked, what's the one moment in your week you'd use it for?   [open text]
+
+Q23. Would you be willing to do a 20-minute conversation about this, or try a prototype? Leave an email or handle if yes.   [open text]
